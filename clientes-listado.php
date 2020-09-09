@@ -1,6 +1,14 @@
 <?php
 
+include_once "config.php";
+include_once "entidades/cliente.php";
+
+
 $pg = "Listado de clientes";
+
+$cliente = new Cliente();
+$aClientes = $cliente->obtenerTodos();
+
 
 include_once("header.php");
 
@@ -16,26 +24,26 @@ include_once("header.php");
                     </div>
             </div>
             <table class="table table-hover border">
-                <tr>
-                    <th>CUIT</th>
-                    <th>Nombre</th>
-                    <th>Fecha nac.</th>
-                    <th>Teléfono</th>
-                    <th>Correo</th>
-                    <th>Domicilios</th>
-                    <th>Acciones</th>
-                </tr>
-                            <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td style="width: 110px;">
-                        <a href="cliente-formulario.php?id=208"><i class="fas fa-search"></i></a>   
-                    </td>
-                </tr>
+              <tr>
+                  <th>CUIT</th>
+                  <th>Nombre</th>
+                  <th>Fecha nac.</th>
+                  <th>Teléfono</th>
+                  <th>Correo</th>
+                  <th>Acciones</th>
+              </tr>
+              <?php foreach ($aClientes as $cliente): ?>
+              <tr>
+                  <td><?php echo $cliente->cuit; ?></td>
+                  <td><?php echo $cliente->nombre; ?></td>
+                  <td><?php echo $cliente->fecha_nac; ?></td>
+                  <td><?php echo $cliente->telefono; ?></td>
+                  <td><?php echo $cliente->correo; ?></td>
+                  <td style="width: 110px;">
+                    <a href="cliente-formulario.php?id=<?php echo $cliente->idcliente; ?>"><i class="fas fa-search"></i></a>   
+                  </td>               
+              </tr>
+              <?php endforeach; ?>
             </table>
         </div>        
         <!-- /.container-fluid -->
@@ -69,7 +77,7 @@ include_once("header.php");
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body">Hacer clic en "Cerrar sesión si deseas finalizar tu sesión actual.</div>
+        <div class="modal-body">Hacer clic en "Cerrar sesión" si deseas finalizar tu sesión actual.</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
           <button type="submit" class="btn btn-primary" name="btnCerrar">Cerrar sesión</button>

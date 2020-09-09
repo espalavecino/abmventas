@@ -1,6 +1,36 @@
 <?php
 
+include_once "config.php";
+include_once "entidades/venta.php";
+include_once "entidades/cliente.php";
+include_once "entidades/producto.php";
+
 $pg = "Ventas";
+
+$venta = new Venta();
+$venta->cargarFormulario($_REQUEST);
+
+$cliente = new Cliente();
+$aClientes = $cliente->obtenerTodos();
+
+$producto = new Producto();
+$aProductos = $producto->obtenerTodos();
+
+if ($_POST) {
+  if (isset($_POST["btnGuardar"])) {
+    if (isset($_GET["id"]) && $_GET["id"] > 0) {
+      $venta->actualizar();
+    } else {
+      $venta->insertar();
+      $msg = "La venta se guardó correctamente";
+    }
+  } else if (isset($_POST["btnBorrar"])) {
+    $venta->eliminar();
+  }
+}
+if (isset($_GET["id"]) && $_GET["id"] > 0) {
+  $venta->obtenerPorId();
+}
 
 include_once("header.php");
 
@@ -24,48 +54,49 @@ include_once("header.php");
           <div class="row">
             <div class="col-6 form-group">
                 <label for="txtFecha">Fecha:</label>
-                <input type="date" required="" class="form-control" name="txtFecha" id="txtFecha" value="2020-08-10">
+                <input type="date" required="" class="form-control" name="txtFecha" id="txtFecha" value="">
             </div>
             <div class="col-6 form-group">
                 <label for="txtFecha">Hora:</label>
-                <input type="time" required="" class="form-control" name="txtHora" id="txtHora" value="00:55">
+                <input type="time" required="" class="form-control" name="txtHora" id="txtHora" value="">
             </div>
             <div class="col-6 form-group">
                 <label for="lstCliente">Cliente:</label>
-                <select required="" class="form-control" name="lstCliente" id="lstCliente">
+                <select required="" class="form-control selectpicker" data-live-search="true" name="lstCliente" id="lstCliente">
                 <option value="" disabled selected>Seleccionar</option>
-                <option value="208">NELSON DANIEL J</option>
-                <option value="207">Nelson</option>
-                <option value="206">Profesionales</option>
-                <option value="179">Clases</option>
-                <option value="174">Juaness</option>
-                <option value="172">Federico</option>
-                <option value="171">Tomas</option>  
+                <?php foreach ($aClientes as $cliente) : ?>
+                    <?php if ($cliente->idcliente == $venta->fk_idcliente) : ?>
+                      <option selected value="<?php echo $cliente->idcliente; ?>"><?php echo $cliente->nombre; ?></option>
+                    <?php else : ?>
+                      <option value="<?php echo $cliente->idcliente; ?>"> <?php echo $cliente->nombre; ?></option>
+                    <?php endif; ?>
+                  <?php endforeach; ?>  
                 </select>
           </div>
           <div class="col-6 form-group">
               <label for="lstProducto">Producto:</label>
-              <select required="" class="form-control" name="lstProducto" id="lstProducto" onchange="fBuscarPrecio();">
+              <select required="" class="form-control selectpicker" data-live-search="true" name="lstProducto" id="lstProducto">
                   <option value="" disabled selected>Seleccionar</option>
-                  <option value="225">Auricular </option>
-                  <option value="230">Mouse Genius</option>
-                  <option value="231">Mouse Genius</option>
-                  <option value="232">Mouse Genius</option>
-                  <option value="242">prueba</option>
-                  <option value="243">Juan</option>
+                  <?php foreach ($aProductos as $producto) : ?>
+                    <?php if ($producto->idproducto == $venta->fk_idproducto) : ?>
+                      <option selected value="<?php echo $producto->idproducto; ?>"><?php echo $producto->nombre; ?></option>
+                    <?php else : ?>
+                      <option value="<?php echo $producto->idproducto; ?>"> <?php echo $producto->nombre; ?></option>
+                    <?php endif; ?>
+                  <?php endforeach; ?>
               </select>
           </div>
             <div class="col-6 form-group">
-                <label for="txtPrecioUni">Precio unitario:</label>
-                <input type="text" class="form-control" name="txtPrecioUni" id="txtPrecioUni" value="0">
+                <label for="txtPrecioUnitario">Precio unitario:</label>
+                <input type="number" class="form-control" name="txtPrecioUnitario" id="txtPrecioUnitario" value="<?php echo $venta->preciounitario; ?>">
             </div>
             <div class="col-6 form-group">
                 <label for="txtCantidad">Cantidad:</label>
-                <input type="text" class="form-control" name="txtCantidad" id="txtCantidad" value="0" onchange="fCalcularTotal();">
+                <input type="number" class="form-control" name="txtCantidad" id="txtCantidad" value="<?php echo $venta->cantidad; ?>">
             </div>
             <div class="col-6 form-group">
                 <label for="txtTotal">Total:</label>
-                <input type="text" class="form-control" name="txtTotal" id="txtTotal" value="0">
+                <input type="text" class="form-control" name="txtTotal" id="txtTotal" value="<?php echo $venta->total; ?>">
             </div>
             </div>
         </div>
@@ -100,7 +131,7 @@ include_once("header.php");
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body">Hacer clic en "Cerrar sesión si deseas finalizar tu sesión actual.</div>
+        <div class="modal-body">Hacer clic en "Cerrar sesión" si deseas finalizar tu sesión actual.</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
           <button type="submit" class="btn btn-primary" name="btnCerrar">Cerrar sesión</button>

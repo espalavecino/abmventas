@@ -1,6 +1,13 @@
 <?php
 
+include_once "config.php";
+include_once "entidades/venta.php";
+
 $pg = "Inicio";
+
+$venta = new Venta();
+$facturacionMes = $venta->obtenerFacturacionMensual(date('m'));
+$facturacionAnual = $venta->obtenerFacturacionAnual(date('Y'));
 
 include_once("header.php");
 
@@ -22,7 +29,7 @@ include_once("header.php");
             <div class="row no-gutters align-items-center">
               <div class="col mr-2">
                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Facturación Mensual</div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800">26.230,00</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo "$" . number_format($facturacionMes, 2, ",", "."); ?></div>
               </div>
               <div class="col-auto">
                 <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -38,7 +45,7 @@ include_once("header.php");
             <div class="row no-gutters align-items-center">
               <div class="col mr-2">
                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Facturación anual</div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800">26.230,00</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo "$" . number_format($facturacionAnual, 2, ",", "."); ?></div>
               </div>
               <div class="col-auto">
                 <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -150,7 +157,7 @@ include_once("header.php");
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body">Hacer clic en "Cerrar sesión si deseas finalizar tu sesión actual.</div>
+        <div class="modal-body">Hacer clic en "Cerrar sesión" si deseas finalizar tu sesión actual.</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
           <button type="submit" class="btn btn-primary" name="btnCerrar">Cerrar sesión</button>

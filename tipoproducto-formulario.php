@@ -1,6 +1,30 @@
 <?php
 
-$pg = "Tipo de productos";
+include_once "config.php";
+include_once "entidades/tipoproducto.php";
+
+$pg = "Edición de Tipo de productos";
+
+$tipoproducto = new Tipoproducto();
+$tipoproducto->cargarFormulario($_REQUEST);
+
+if ($_POST) {
+  if (isset($_POST["btnGuardar"])) {
+    if (isset($_GET["id"]) && $_GET["id"] > 0) {
+      $tipoproducto->actualizar();
+    } else {
+      $tipoproducto->insertar();
+      $msg = "Guardado correctamente";
+    }
+  } else if (isset($_POST["btnBorrar"])) {
+    $tipoproducto->eliminar();
+  }
+}
+if (isset($_GET["id"]) && $_GET["id"] > 0) {
+  $tipoproducto->obtenerPorId();
+
+
+}
 
 include_once("header.php");
 
@@ -22,7 +46,7 @@ include_once("header.php");
   <div class="row">
       <div class="col-12 form-group">
           <label for="txtNombre">Nombre:</label>
-          <input type="text" required="" class="form-control" name="txtNombre" id="txtNombre" value="">
+          <input type="text" required class="form-control" name="txtNombre" id="txtNombre" value="<?php echo $tipoproducto->nombre; ?>">
       </div>
   </div>
 </div>
@@ -57,7 +81,7 @@ include_once("header.php");
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body">Hacer clic en "Cerrar sesión si deseas finalizar tu sesión actual.</div>
+        <div class="modal-body">Hacer clic en "Cerrar sesión" si deseas finalizar tu sesión actual.</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
           <button type="submit" class="btn btn-primary" name="btnCerrar">Cerrar sesión</button>

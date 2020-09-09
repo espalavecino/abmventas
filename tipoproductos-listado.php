@@ -1,6 +1,15 @@
 <?php
 
+include_once "config.php";
+include_once "entidades/tipoproducto.php";
+
 $pg = "Listado de tipo de productos";
+
+
+$tipoproducto = new Tipoproducto();
+$aTipoProductos = $tipoproducto->obtenerTodos();
+
+
 
 include_once("header.php");
 
@@ -18,34 +27,18 @@ include_once("header.php");
             </div>
           <table class="table table-hover border">
             <tr>
-                <th>Nombre</th>
-                <th>Acciones</th>
+              <th>Nombre</th>
+              <th>Acciones</th>
             </tr>
-                          <tr>
-                  <td>Electrodomésticos</td>
-                  <td style="width: 110px;">
-                      <a href="tipoproducto-formulario.php?id=1"><i class="fas fa-search"></i></a>   
-                  </td>
-              </tr>
-                          <tr>
-                  <td>Jardinería</td>
-                  <td style="width: 110px;">
-                      <a href="tipoproducto-formulario.php?id=3"><i class="fas fa-search"></i></a>   
-                  </td>
-              </tr>
-                          <tr>
-                  <td>Perifericos PC</td>
-                  <td style="width: 110px;">
-                      <a href="tipoproducto-formulario.php?id=39"><i class="fas fa-search"></i></a>   
-                  </td>
-              </tr>
-                          <tr>
-                  <td>Oficina</td>
-                  <td style="width: 110px;">
-                      <a href="tipoproducto-formulario.php?id=40"><i class="fas fa-search"></i></a>   
-                  </td>
-              </tr>
-                      </table>
+            <?php foreach ($aTipoProductos as $tipoproducto) : ?>
+            <tr>
+              <td><?php echo $tipoproducto->nombre; ?></td>
+              <td style="width: 110px;">
+                <a href="tipoproducto-formulario.php?id=<?php echo $tipoproducto->idtipoproducto; ?>"><i class="fas fa-search"></i></a>   
+              </td>           
+            </tr> 
+            <?php endforeach; ?>          
+          </table>
 
         </div>
     <!-- End of Main Content -->       
@@ -79,7 +72,7 @@ include_once("header.php");
               <span aria-hidden="true">×</span>
             </button>
           </div>
-          <div class="modal-body">Hacer clic en "Cerrar sesión si deseas finalizar tu sesión actual.</div>
+          <div class="modal-body">Hacer clic en "Cerrar sesión" si deseas finalizar tu sesión actual.</div>
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
             <button type="submit" class="btn btn-primary" name="btnCerrar">Cerrar sesión</button>

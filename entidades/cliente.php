@@ -47,6 +47,7 @@ class Cliente {
                     '" . $this->correo ."', 
                     '" . $this->fecha_nac ."'
                 );";
+
         //Ejecuta la query
         if (!$mysqli->query($sql)) {
             printf("Error en query: %s\n", $mysqli->error . " " . $sql);
@@ -112,25 +113,20 @@ class Cliente {
     }
 
   public function obtenerTodos(){
-        $aCliente = null;
+        $aClientes = array();
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE);
-        $resultado = $mysqli->query("SELECT
-    A.idcliente,
-    A.cuit,
-    A.nombre,
-    A.telefono,
-    A.correo,
-    (SELECT GROUP_CONCAT('(', C.nombre, ') ', B.domicilio, ', ', D.nombre, ', ', E.nombre SEPARATOR '<br>') 
-        FROM domicilios B 
-        INNER JOIN tipo_domicilios C ON C.idtipo = B.fk_tipo
-        INNER JOIN localidades D ON D.idlocalidad = B.fk_idlocalidad
-        INNER JOIN provincias E ON E.idprovincia = D.fk_idprovincia
-        WHERE B.fk_idcliente = A.idcliente
-        ) as domicilio
-FROM
-    clientes A
-ORDER BY
-    idcliente DESC");
+        $sql = "SELECT
+        A.idcliente,
+        A.cuit,
+        A.nombre,
+        A.telefono,
+        A.correo,
+        A.fecha_nac
+    FROM
+        clientes A
+    ORDER BY
+        idcliente DESC";
+        $resultado = $mysqli->query($sql);
 
         if($resultado){
             while ($fila = $resultado->fetch_assoc()) {
@@ -140,11 +136,11 @@ ORDER BY
                 $obj->nombre = $fila["nombre"];
                 $obj->telefono = $fila["telefono"];
                 $obj->correo = $fila["correo"];
-                $obj->domicilio = $fila["domicilio"];
-                $aCliente[] = $obj;
+                $obj->fecha_nac = $fila["fecha_nac"];
+                $aClientes[] = $obj;
 
             }
-            return $aCliente;
+            return $aClientes;
         }
     }
 

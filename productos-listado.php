@@ -1,6 +1,12 @@
 <?php
 
+include_once "config.php";
+include_once "entidades/producto.php";
+
 $pg = "Listado de productos";
+
+$producto = new Producto();
+$aProducto = $producto->obtenerTodos();
 
 include_once("header.php");
 
@@ -23,15 +29,17 @@ include_once("header.php");
           <th>Precio</th>
           <th>Acciones</th>
         </tr>
+        <?php foreach ($aProducto as $producto): ?>
         <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td style="width: 110px;">
-            <a href="producto-formulario.php?id=225"><i class="fas fa-search"></i></a>   
-          </td>
+            <td><img src="imagenes/<?php echo $producto->imagen; ?>" class="img-thumbnail"></td>
+            <td><?php echo $producto->nombre; ?></td>
+            <td><?php echo $producto->cantidad; ?></td>
+            <td><?php echo $producto->precio; ?></td>
+            <td style="width: 110px;">
+              <a href="producto-formulario.php?id=<?php echo $producto->idproducto; ?>"><i class="fas fa-search"></i></a>   
+            </td>
         </tr>
+        <?php endforeach; ?>
       </table>
     <!-- /.container-fluid -->
   </div>
@@ -67,7 +75,7 @@ include_once("header.php");
               <span aria-hidden="true">×</span>
             </button>
           </div>
-          <div class="modal-body">Hacer clic en "Cerrar sesión si deseas finalizar tu sesión actual.</div>
+          <div class="modal-body">Hacer clic en "Cerrar sesión" si deseas finalizar tu sesión actual.</div>
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
             <button type="submit" class="btn btn-primary" name="btnCerrar">Cerrar sesión</button>

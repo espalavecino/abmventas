@@ -1,6 +1,12 @@
 <?php
 
+include_once "config.php";
+include_once "entidades/venta.php";
+
 $pg = "Listado de ventas";
+
+$venta = new Venta();
+$aVentas = $venta->obtenerTodos();
 
 include_once("header.php");
 
@@ -21,64 +27,26 @@ include_once("header.php");
           </div>
           <table class="table table-hover border">
             <tr>
-                <th style="width: 170px;">Fecha</th>
-                <th style="width: 130px;">Cantidad</th>
-                <th>Producto</th>
-                <th>Cliente</th>
-                <th style="width: 150px;">Total</th>
-                <th style="width: 110px;">Acciones</th>
+              <th>Fecha</th>
+              <th>Cantidad</th>
+              <th>Producto</th>
+              <th>Cliente</th>
+              <th>Total</th>
+              <th>Acciones</th>
             </tr>
-                          <tr>
-                  <td>08/08/2020 14:08</td>
-                  <td>3</td>
-                  <td>Mouse Genius</td>
-                  <td>Tomas</td>
-                  <td>3600.00</td>
-                  <td>
-                      <a href="venta-formulario.php?id=31"><i class="fas fa-search"></i></a>   
-                  </td>
-              </tr>
-                          <tr>
-                  <td>08/08/2020 14:08</td>
-                  <td>1</td>
-                  <td>Auricular </td>
-                  <td>Tomas</td>
-                  <td>1009.00</td>
-                  <td>
-                      <a href="venta-formulario.php?id=27"><i class="fas fa-search"></i></a>   
-                  </td>
-              </tr>
-                          <tr>
-                  <td>08/08/2020 14:08</td>
-                  <td>1</td>
-                  <td>Mouse Genius</td>
-                  <td>Nelson</td>
-                  <td>1000.00</td>
-                  <td>
-                      <a href="venta-formulario.php?id=29"><i class="fas fa-search"></i></a>   
-                  </td>
-              </tr>
-                          <tr>
-                  <td>08/08/2020 14:08</td>
-                  <td>1</td>
-                  <td>Mouse Genius</td>
-                  <td>Juaness</td>
-                  <td>1200.00</td>
-                  <td>
-                      <a href="venta-formulario.php?id=26"><i class="fas fa-search"></i></a>   
-                  </td>
-              </tr>
-                          <tr>
-                  <td>04/08/2020 21:08</td>
-                  <td>1</td>
-                  <td>Mouse Genius</td>
-                  <td>Tomas</td>
-                  <td>1200.00</td>
-                  <td>
-                      <a href="venta-formulario.php?id=21"><i class="fas fa-search"></i></a>   
-                  </td>
-              </tr>
-                      </table>
+          <?php foreach ($aVentas as $venta): ?>
+            <tr>
+              <td><?php echo $venta->fecha; ?></td>
+              <td><?php echo $venta->cantidad; ?></td>
+              <td><?php echo $venta->nombre_producto; ?></td>
+              <td><?php echo $venta->nombre_cliente; ?></td>
+              <td><?php echo $venta->total; ?></td>
+              <td>
+                <a href="venta-formulario.php?id=<?php echo $venta->idventa; ?>"><i class="fas fa-search"></i></a>   
+              </td>
+            </tr>
+          <?php endforeach; ?>
+            </table>
         </div>
         <!-- /.container-fluid -->
         <!-- End of Main Content -->

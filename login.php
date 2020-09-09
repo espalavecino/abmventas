@@ -1,16 +1,17 @@
 <?php
-
-session_start();
-
-$claveEncriptada = password_hash("admin123", PASSWORD_DEFAULT);
+include_once "config.php";
+include_once "entidades/usuario.php";
 
 if ($_POST) {
-
-  $usuario = trim($_POST["txtUsuario"]);
+  //Comprobamos que el usuario sea admin y la clave sea admin 123
+  $usuario = trim($_POST["txtUsuario"]); //trim elimina los espacios de los laterales
   $clave = trim($_POST["txtClave"]);
 
-  if($usuario == "admin" && password_verify($clave, $claveEncriptada)) {
-      $_SESSION["nombre"] = "Esteban Palavecino";
+  $entidadUsuario = new Usuario();
+  $entidadUsuario->obtenerPorUsuario($usuario);
+
+  if($entidadUsuario->verificarClave($clave, $entidadUsuario->clave)) {
+      $_SESSION["nombre"] = $entidadUsuario->nombre;
       header("location:index.php");
 
     } else {
